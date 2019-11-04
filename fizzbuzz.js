@@ -1,6 +1,8 @@
 function fizzbuzz(number) {
-  if (number === 3) return "fizz";
-  if (number === 5) return "buzz";
+  let result = '';
+  if (number % 3 === 0) result += 'fizz';
+  if (number % 5 === 0) result += "buzz";
+  if (result) return result;
   return number;
 }
 

@@ -11,4 +11,10 @@ describe('fizzbuzz test', () => {
 
     assert.equal(result, "fizz");
   })
+
+  it('should 5 display buzz', () => {
+    const result = fizzbuzz(5);
+
+    assert.equal(result, "buzz");
+  })
 })

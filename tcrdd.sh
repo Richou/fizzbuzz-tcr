@@ -5,7 +5,13 @@ MESSAGE=""
 function usage() {
     cat << EOF
 Usage :
-$0 [-g|-r] testCommand and arguments
+$0 [options...] testCommand [arguments...]
+
+Options:
+    -l, --local             local mode : do not push nor pull
+    -g, --green             assume the tests will pass
+    -r, --red               assume the tests will fail
+    -m, --message MESSAGE   use the provided commit message
 EOF
     exit -1
 }
@@ -56,7 +62,7 @@ function pull(){
 
 # detect remote changes (not actually fetching them)
 function needsPull(){
-    [[ ! -z `git fetch --dry-run 2>&1` ]]
+    ${ASSUMING_REMOTE} && [[ ! -z `git fetch --dry-run 2>&1` ]]
 }
 
 # if push required, launch tests then push
@@ -68,33 +74,59 @@ function push() {
 
 # detect local changes wrt remote
 function needsPush(){
-    [[ ! -z `git diff ${BRANCH} HEAD` ]]
+    ${ASSUMING_REMOTE} && [[ ! -z `git diff ${BRANCH} HEAD` ]]
 }
 
 # main
 ASSUMING_GREEN=false
 ASSUMING_RED=false
+ASSUMING_REMOTE=true
 
-while getopts ":rghim:" opt; do
-  case ${opt} in
-    g )
+TEST_GETOPT_CMD=$(getopt -T)
+if (( $? != 4 )) && [[ -n $TEST_GETOPT_CMD ]]; then
+    OPTIONS=`getopt lgrhm: $*`
+else
+    OPTIONS=`getopt -o lgrhm: --long local,green,red,help,message: -n "$(basename $0)" -- "$@"`
+fi
+
+eval set -- "${OPTIONS}"
+
+if [ $? != 0 ]
+then
+    usage
+fi
+
+while true; do
+  case $1 in
+    -l | --local )
+      ASSUMING_REMOTE=false
+      shift
+      ;;
+    -g | --green )
       ASSUMING_GREEN=true
+      shift
       ;;
-    r )
+    -r | --red )
       ASSUMING_RED=true
+      shift
       ;;
-    h )
+    -h | --help )
       usage
+      shift
       ;;
-    m )
-      MESSAGE="${OPTARG}"
+    -m | --message )
+      MESSAGE="$2"
+      shift 2
       ;;
-    \? )
-      echo "Invalid option: $OPTARG" 1>&2
+    -- ) # Stop processing options
+      shift
+      break
+      ;;
+    * )
+      break
       ;;
   esac
 done
-shift $((OPTIND -1))
 
 CMD="$@"
 if [ -z "$CMD" ]

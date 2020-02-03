@@ -9,6 +9,6 @@ describe('fizzbuzz test', () => {
   it('should 3 returns fizz', () => {
     const result = fizzbuzz(3);
 
-    assert.equal('fizz', result);
+    assert.equal('buzz', result);
   })
 })

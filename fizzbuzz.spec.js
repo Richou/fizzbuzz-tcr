@@ -6,8 +6,8 @@ describe('fizzbuzz test', () => {
   })
 
   it('should fail', () => {
-    const result = fizzbuzz(3);
+    const result = fizzbuzz(5);
 
-    expect(result).toEqual('fizz');
+    expect(result).toEqual('buzz');
   })
 })

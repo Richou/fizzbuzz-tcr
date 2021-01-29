@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha fizzbuzz.spec.js"
+    "test": "jest fizzbuzz.spec.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^6.2.2"
+    "jest": "^26.6.3"
   }
 }

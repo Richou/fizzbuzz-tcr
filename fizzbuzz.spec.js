@@ -10,4 +10,10 @@ describe('fizzbuzz test', () => {
 
     expect(result).toEqual('fizz');
   })
+
+  it('should returns buzz', () => {
+    const result = fizzbuzz(5);
+
+    expect(result).toEqual('buzz');
+  })
 })

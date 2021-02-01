@@ -12,8 +12,8 @@ describe('fizzbuzz test', () => {
   })
 
   it('should returns buzz when multiple of 5', () => {
-    const result = fizzbuzz(5);
+    const result = fizzbuzz(15);
 
-    expect(result).toEqual('buzz');
+    expect(result).toEqual('fizzbuzz');
   })
 })
